@@ -13,14 +13,16 @@ enum StateAnimationType {
 class StateDefinition {
   final dynamic state;
   final WidgetBuilder builder;
+  final Widget child;
   final int order;
 
   StateDefinition({
     @required this.state,
-    @required this.builder,
+    this.builder,
+    this.child,
     this.order = 0,
   })  : assert(state != null),
-        assert(builder != null),
+        assert(builder != null || child != null),
         assert(order != null);
 }
 
@@ -58,7 +60,9 @@ class _StateContainerState extends State<StateContainer> {
 
     final index = widget.states.indexOf(_lastState);
     final child = Container(
-      child: _lastState?.builder(context),
+      child: _lastState?.builder == null
+          ? _lastState?.child
+          : _lastState?.builder(context),
       key: ValueKey(index),
     );
 
