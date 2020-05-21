@@ -1,7 +1,7 @@
 library state_container;
 
 import 'package:animations/animations.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 enum StateAnimationType {
   FADE,
@@ -15,12 +15,14 @@ class StateDefinition {
   final WidgetBuilder builder;
   final Widget child;
   final int order;
+  final Color backgroundColor;
 
   StateDefinition({
     @required this.state,
     this.builder,
     this.child,
     this.order = 0,
+    this.backgroundColor = Colors.transparent,
   })  : assert(state != null),
         assert(builder != null || child != null),
         assert(order != null);
@@ -60,6 +62,7 @@ class _StateContainerState extends State<StateContainer> {
 
     final index = widget.states.indexOf(_lastState);
     final child = Container(
+      color: state.backgroundColor,
       child: _lastState?.builder == null
           ? _lastState?.child
           : _lastState?.builder(context),
