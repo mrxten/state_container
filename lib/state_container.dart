@@ -79,21 +79,21 @@ class _StateContainerState extends State<StateContainer> {
         duration: widget.animationDuration,
       );
     }
-    return PageTransitionSwitcher(
-      duration: widget.animationDuration,
-      reverse: reverse,
-      transitionBuilder: (child, animation, secondaryAnimation) {
-        return Container(
-          color: state.backgroundColor,
-          child: SharedAxisTransition(
+    return Container(
+      color: state.backgroundColor,
+      child: PageTransitionSwitcher(
+        duration: widget.animationDuration,
+        reverse: reverse,
+        transitionBuilder: (child, animation, secondaryAnimation) {
+          return SharedAxisTransition(
             child: child,
             animation: animation,
             secondaryAnimation: secondaryAnimation,
             transitionType: _getTransitionType(),
-          ),
-        );
-      },
-      child: child,
+          );
+        },
+        child: child,
+      ),
     );
   }
 
