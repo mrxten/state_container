@@ -1,6 +1,6 @@
 name: state_container
 description: Flutter widget for control different states.
-version: 0.0.3+3
+version: 0.0.4
 homepage: https://github.com/mrxten/state_container
 
 environment:

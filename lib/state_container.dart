@@ -62,7 +62,7 @@ class _StateContainerState extends State<StateContainer> {
 
     final index = widget.states.indexOf(_lastState);
     final child = Container(
-      color: state.backgroundColor,
+      color: state?.backgroundColor,
       child: _lastState?.builder == null
           ? _lastState?.child
           : _lastState?.builder(context),

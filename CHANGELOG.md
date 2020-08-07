@@ -1,3 +1,6 @@
+## [0.0.4]
+* Some bugfixes
+
 ## [0.0.3]
 * Add background color for state
 
