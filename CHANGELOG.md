@@ -1,3 +1,6 @@
+## [0.0.5]
+* Add transition color, update animations pub.
+
 ## [0.0.4]
 * Some bugfixes
 

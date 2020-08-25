@@ -33,12 +33,14 @@ class StateContainer extends StatefulWidget {
   final List<StateDefinition> states;
   final Duration animationDuration;
   final StateAnimationType animationType;
+  final Color transitionColor;
 
   const StateContainer({
     @required this.state,
     @required this.states,
     this.animationDuration = const Duration(milliseconds: 300),
     this.animationType = StateAnimationType.FADE,
+    this.transitionColor = Colors.transparent,
     Key key,
   })  : assert(state != null),
         assert(states != null),
@@ -88,6 +90,7 @@ class _StateContainerState extends State<StateContainer> {
           animation: animation,
           secondaryAnimation: secondaryAnimation,
           transitionType: _getTransitionType(),
+          fillColor: widget.transitionColor,
         );
       },
       child: child,
