@@ -1,3 +1,6 @@
+## [0.1.0]
+* Move to null safety
+
 ## [0.0.5]
 * Add transition color, update animations pub.
 

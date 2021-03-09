@@ -12,40 +12,36 @@ enum StateAnimationType {
 
 class StateDefinition {
   final dynamic state;
-  final WidgetBuilder builder;
-  final Widget child;
+  final WidgetBuilder? builder;
+  final Widget? child;
   final int order;
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   StateDefinition({
-    @required this.state,
+    required this.state,
     this.builder,
     this.child,
     this.order = 0,
     this.backgroundColor = Colors.transparent,
   })  : assert(state != null),
-        assert(builder != null || child != null),
-        assert(order != null);
+        assert(builder != null || child != null);
 }
 
 class StateContainer extends StatefulWidget {
   final dynamic state;
-  final List<StateDefinition> states;
+  final List<StateDefinition?> states;
   final Duration animationDuration;
   final StateAnimationType animationType;
-  final Color transitionColor;
+  final Color? transitionColor;
 
   const StateContainer({
-    @required this.state,
-    @required this.states,
+    required this.state,
+    required this.states,
     this.animationDuration = const Duration(milliseconds: 300),
     this.animationType = StateAnimationType.FADE,
     this.transitionColor = Colors.transparent,
-    Key key,
+    Key? key,
   })  : assert(state != null),
-        assert(states != null),
-        assert(animationDuration != null),
-        assert(animationType != null),
         super(key: key);
 
   @override
@@ -53,12 +49,14 @@ class StateContainer extends StatefulWidget {
 }
 
 class _StateContainerState extends State<StateContainer> {
-  StateDefinition _lastState;
+  StateDefinition? _lastState;
 
   @override
   Widget build(BuildContext context) {
-    final state = widget.states
-        .firstWhere((e) => e.state == widget.state, orElse: () => null);
+    final state = widget.states.firstWhere(
+      (e) => e!.state == widget.state,
+      orElse: () => null,
+    );
     final reverse = (state?.order ?? 0) < (_lastState?.order ?? 0);
     _lastState = state;
 
@@ -67,7 +65,7 @@ class _StateContainerState extends State<StateContainer> {
       color: state?.backgroundColor,
       child: _lastState?.builder == null
           ? _lastState?.child
-          : _lastState?.builder(context),
+          : _lastState?.builder!(context),
       key: ValueKey(index),
     );
 
