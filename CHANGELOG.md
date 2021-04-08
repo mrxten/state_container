@@ -1,3 +1,6 @@
+## [0.2.0]
+* Micro fixes with transitions
+
 ## [0.1.0]
 * Move to null safety
 

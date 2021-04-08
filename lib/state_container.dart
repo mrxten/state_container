@@ -12,31 +12,28 @@ enum StateAnimationType {
 
 class StateDefinition {
   final dynamic state;
-  final WidgetBuilder? builder;
-  final Widget? child;
+  final WidgetBuilder builder;
   final int order;
   final Color? backgroundColor;
 
   StateDefinition({
     required this.state,
-    this.builder,
-    this.child,
+    required this.builder,
     this.order = 0,
     this.backgroundColor = Colors.transparent,
-  })  : assert(state != null),
-        assert(builder != null || child != null);
+  });
 }
 
 class StateContainer extends StatefulWidget {
   final dynamic state;
-  final List<StateDefinition?> states;
+  final List<StateDefinition> stateDefinitions;
   final Duration animationDuration;
   final StateAnimationType animationType;
   final Color? transitionColor;
 
   const StateContainer({
     required this.state,
-    required this.states,
+    required this.stateDefinitions,
     this.animationDuration = const Duration(milliseconds: 300),
     this.animationType = StateAnimationType.FADE,
     this.transitionColor = Colors.transparent,
@@ -53,45 +50,45 @@ class _StateContainerState extends State<StateContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final state = widget.states.firstWhere(
-      (e) => e!.state == widget.state,
-      orElse: () => null,
+    final StateDefinition state = widget.stateDefinitions.firstWhere(
+      (e) => e.state == widget.state,
+      orElse: () => StateDefinition(
+        state: null,
+        builder: (context) => SizedBox.shrink(),
+      ),
     );
-    final reverse = (state?.order ?? 0) < (_lastState?.order ?? 0);
+    final reverse = state.order < (_lastState?.order ?? 0);
     _lastState = state;
 
-    final index = widget.states.indexOf(_lastState);
+    final index = widget.stateDefinitions.indexOf(_lastState!);
     final child = Container(
-      color: state?.backgroundColor,
-      child: _lastState?.builder == null
-          ? _lastState?.child
-          : _lastState?.builder!(context),
+      color: _lastState!.backgroundColor,
+      child: _lastState!.builder(context),
       key: ValueKey(index),
     );
 
-    if (widget.animationType == StateAnimationType.FADE) {
-      return AnimatedSwitcher(
-        child: child,
-        transitionBuilder: (child, animation) => FadeTransition(
-          child: child,
-          opacity: animation,
-        ),
-        duration: widget.animationDuration,
-      );
-    }
     return PageTransitionSwitcher(
       duration: widget.animationDuration,
       reverse: reverse,
-      transitionBuilder: (child, animation, secondaryAnimation) {
+      child: child,
+      transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+        if (widget.animationType == StateAnimationType.FADE) {
+          return FadeTransition(
+            opacity: Tween<double>(
+              begin: 0.0,
+              end: 1.0,
+            ).animate(primaryAnimation),
+            child: child,
+          );
+        }
         return SharedAxisTransition(
           child: child,
-          animation: animation,
+          animation: primaryAnimation,
           secondaryAnimation: secondaryAnimation,
           transitionType: _getTransitionType(),
           fillColor: widget.transitionColor,
         );
       },
-      child: child,
     );
   }
 
